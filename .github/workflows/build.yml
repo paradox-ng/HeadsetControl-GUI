@@ -11,9 +11,17 @@ permissions:
 
 jobs:
   appimage:
-    # Build on an older Ubuntu so the AppImage runs on a wide range of distros
-    # (it links against that runner's glibc).
-    runs-on: ubuntu-22.04
+    name: AppImage (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Native runners per arch - older Ubuntu for broad glibc compatibility.
+          - runner: ubuntu-22.04
+            arch: x86_64
+          - runner: ubuntu-22.04-arm
+            arch: aarch64
     steps:
       - uses: actions/checkout@v4
 
@@ -34,8 +42,8 @@ jobs:
       - name: Upload AppImage artifact
         uses: actions/upload-artifact@v4
         with:
-          name: HeadsetControl-GUI-x86_64.AppImage
-          path: dist/HeadsetControl-GUI-x86_64.AppImage
+          name: HeadsetControl-GUI-${{ matrix.arch }}
+          path: dist/HeadsetControl-GUI-${{ matrix.arch }}.AppImage
           if-no-files-found: error
 
   release:
@@ -45,14 +53,14 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Download AppImage
+      - name: Download all AppImages
         uses: actions/download-artifact@v4
         with:
-          name: HeadsetControl-GUI-x86_64.AppImage
           path: dist
+          merge-multiple: true
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/HeadsetControl-GUI-x86_64.AppImage
+          files: dist/*.AppImage
           generate_release_notes: true

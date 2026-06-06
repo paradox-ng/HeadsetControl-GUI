@@ -1,16 +1,25 @@
 #!/usr/bin/env bash
-# Build a self-contained AppImage of HeadsetControl GUI.
-# Works locally and in CI. Produces dist/HeadsetControl-GUI-x86_64.AppImage.
+# Build a self-contained AppImage of HeadsetControl GUI for the host's
+# architecture. Works locally and in CI. Produces
+# dist/HeadsetControl-GUI-<arch>.AppImage (x86_64 or aarch64).
 set -euo pipefail
 
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 ROOT="$(dirname "$HERE")"
 cd "$ROOT"
 
+# Map the host machine to AppImage/appimagetool arch names.
+case "$(uname -m)" in
+  x86_64)        AIARCH=x86_64 ;;
+  aarch64|arm64) AIARCH=aarch64 ;;
+  *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;;
+esac
+
 APP="headsetcontrol-gui"
 BUILD="$ROOT/build"
 DIST="$ROOT/dist"
 APPDIR="$BUILD/AppDir"
+OUTPUT="$DIST/HeadsetControl-GUI-${AIARCH}.AppImage"
 
 rm -rf "$BUILD" "$DIST"
 mkdir -p "$APPDIR" "$DIST"
@@ -43,10 +52,9 @@ install -m755 "$HERE/AppRun" "$APPDIR/AppRun"
 # 3. Pack it with appimagetool (no FUSE needed via extract-and-run).
 TOOL="$BUILD/appimagetool.AppImage"
 curl -fsSL -o "$TOOL" \
-  "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
+  "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${AIARCH}.AppImage"
 chmod +x "$TOOL"
 
-ARCH=x86_64 "$TOOL" --appimage-extract-and-run \
-  "$APPDIR" "$DIST/HeadsetControl-GUI-x86_64.AppImage"
+ARCH="$AIARCH" "$TOOL" --appimage-extract-and-run "$APPDIR" "$OUTPUT"
 
-echo "Built: $DIST/HeadsetControl-GUI-x86_64.AppImage"
+echo "Built: $OUTPUT"

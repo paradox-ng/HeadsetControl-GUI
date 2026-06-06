@@ -50,14 +50,17 @@ python -m headsetcontrol_gui
 
 **AppImage** (no Python/Qt needed, just `headsetcontrol`):
 
+Download the AppImage for your CPU architecture from the
+[Releases](../../releases) page - `x86_64` for most PCs, `aarch64` for ARM64
+(e.g. a Raspberry Pi or ARM laptop):
+
 ```bash
 chmod +x HeadsetControl-GUI-x86_64.AppImage
 ./HeadsetControl-GUI-x86_64.AppImage
 ```
 
-Download the latest AppImage from the
-[Releases](../../releases) page. (Running an AppImage may require `fuse2`; if it
-won't start, run it with `--appimage-extract-and-run`.)
+(Running an AppImage may require `fuse2`; if it won't start, run it with
+`--appimage-extract-and-run`.)
 
 Only one instance runs at a time - launching it again just raises the existing
 window instead of starting a second copy (multiple copies would fight over the
@@ -138,17 +141,19 @@ don't show that control.
 
 ```bash
 bash packaging/build_appimage.sh
-# -> dist/HeadsetControl-GUI-x86_64.AppImage
+# -> dist/HeadsetControl-GUI-<arch>.AppImage  (matches your machine)
 ```
 
 It uses PyInstaller to bundle the app + Python + Qt, lays out an AppDir, and
-packs it with `appimagetool`.
+packs it with `appimagetool`. The script builds for the host architecture; CI
+builds both `x86_64` and `aarch64` on native runners.
 
 ## Releases / CI
 
-[`.github/workflows/build.yml`](.github/workflows/build.yml) builds the AppImage
-on every push and pull request (uploaded as a run artifact). Pushing a version
-tag also publishes a GitHub Release with the AppImage attached:
+[`.github/workflows/build.yml`](.github/workflows/build.yml) builds the
+`x86_64` and `aarch64` AppImages on every push and pull request (uploaded as run
+artifacts). Pushing a version tag also publishes a GitHub Release with both
+AppImages attached:
 
 ```bash
 git tag v0.1.0
