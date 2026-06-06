@@ -155,6 +155,13 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
+## Contributing
+
+This is a small personal project, but feel free to fork it and adapt it to your
+needs - or open a PR to add better support for other HeadsetControl-supported
+headsets and their features. It's released into the public domain (see below),
+so do whatever you like with it.
+
 ## Layout
 
 - `headsetcontrol_gui/backend.py` - CLI wrapper (read state, set sidetone/lights/notification)
@@ -163,3 +170,8 @@ git push origin v0.1.0
 - `headsetcontrol_gui/__main__.py` - entry point + single-instance guard
 - `packaging/` - AppImage build script, launcher, desktop entry, icon
 - `.github/workflows/build.yml` - CI: build on push/PR, release on tags
+
+## License
+
+Released into the public domain under the [Unlicense](LICENSE) - no attribution
+required, do whatever you want with it.
