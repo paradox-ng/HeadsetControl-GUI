@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "headsetcontrol-gui"
+version = "0.1.0"
+description = "Qt6 system-tray GUI for the HeadsetControl CLI"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Unlicense"
+dependencies = ["PySide6>=6.5"]
+
+[project.scripts]
+headsetcontrol-gui = "headsetcontrol_gui.__main__:main"
+
+[tool.setuptools]
+packages = ["headsetcontrol_gui"]

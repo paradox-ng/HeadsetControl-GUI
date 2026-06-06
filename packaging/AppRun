@@ -1,0 +1,5 @@
+#!/bin/bash
+# AppImage entry point. Launches the bundled PyInstaller executable.
+HERE="$(dirname "$(readlink -f "$0")")"
+export PATH="$HERE/usr/bin:$PATH"
+exec "$HERE/usr/bin/headsetcontrol-gui" "$@"
