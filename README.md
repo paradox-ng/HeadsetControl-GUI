@@ -5,10 +5,12 @@ with a control window and a system-tray icon.
 
 This is a personal project: I wanted to control my headset from a GUI window and
 the system tray instead of the terminal. The scope is intentionally small - it
-covers the features my headset (a Corsair VOID Elite Wireless) supports:
-**sidetone**, **lights**, **battery**, and **notification sounds**. The UI is
-built from the capabilities each device reports, so it adapts to other
-HeadsetControl-supported headsets, but I only set out to cover what I needed.
+only implements the features my headset (a Corsair VOID Elite Wireless)
+supports: **sidetone**, **lights**, **battery**, and **notification sounds**.
+Each control is shown only if the connected device reports that capability, so a
+headset missing one of these just won't display it - but the app doesn't cover
+HeadsetControl's other features (equalizer, inactive time, chat-mix, etc.). I
+only set out to cover what I needed.
 
 Built with Python/PySide6, made for KDE Plasma (Wayland), though the control
 window runs on any desktop.
