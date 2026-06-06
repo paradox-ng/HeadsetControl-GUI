@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=HeadsetControl GUI
+Comment=Control headset sidetone, lights and battery from the system tray
+Exec=/home/paradox/Workspace/HeadsetControl-GUI/run.sh --hidden
+Icon=audio-headset
+Terminal=false
+Categories=AudioVideo;Audio;Settings;
+StartupNotify=false
+X-GNOME-Autostart-enabled=true
