@@ -1,14 +1,17 @@
 # HeadsetControl GUI
 
-A lightweight Qt6 system-tray GUI for the
-[HeadsetControl](https://github.com/Sapd/HeadsetControl) CLI. Focused on the
-things you actually reach for: **sidetone**, **light toggle**,
-**battery at a glance**, and **notification sounds**.
+A Qt6 GUI for the [HeadsetControl](https://github.com/Sapd/HeadsetControl) CLI,
+with a control window and a system-tray icon.
 
-Built with Python/PySide6, made for KDE Plasma (Wayland) but the window runs
-anywhere. Tested with a Corsair VOID Elite Wireless; the UI adapts to whatever
-capabilities your device reports, so it works with any HeadsetControl-supported
-headset.
+This is a personal project: I wanted to control my headset from a GUI window and
+the system tray instead of the terminal. The scope is intentionally small - it
+covers the features my headset (a Corsair VOID Elite Wireless) supports:
+**sidetone**, **lights**, **battery**, and **notification sounds**. The UI is
+built from the capabilities each device reports, so it adapts to other
+HeadsetControl-supported headsets, but I only set out to cover what I needed.
+
+Built with Python/PySide6, made for KDE Plasma (Wayland), though the control
+window runs on any desktop.
 
 ## Screenshots
 
@@ -87,11 +90,11 @@ Your sidetone level, lights state, and the two toggles are saved with
 `QSettings` (in `~/.config/headsetcontrol-gui/`) and persist across restarts
 and reboots.
 
-Because the headset is volatile - it forgets sidetone/lights when powered off,
-and the CLI can't read the current values back - the app **re-applies your saved
-sidetone and lights whenever the headset connects** (at startup and on every
-reconnect). So if you autostart it, your configuration is restored to the
-headset automatically on boot, and again each time you power the headset on.
+Headsets don't keep their sidetone/lights settings when powered off, and the CLI
+can't read the current values back - so the app **re-applies your saved sidetone
+and lights whenever the headset connects** (at startup and on every reconnect).
+So if you autostart it, your configuration is restored to the headset
+automatically on boot, and again each time you power the headset on.
 
 **Autostart on KDE Plasma:** add it in
 *System Settings -> Autostart -> Add -> Application*, pointing at the AppImage
