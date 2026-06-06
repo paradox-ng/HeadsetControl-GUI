@@ -10,6 +10,19 @@ anywhere. Tested with a Corsair VOID Elite Wireless; the UI adapts to whatever
 capabilities your device reports, so it works with any HeadsetControl-supported
 headset.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center"><img src="readme_pictures/1.png" alt="Control window and tray menu with a headset connected" width="340"></td>
+    <td align="center"><img src="readme_pictures/2.png" alt="Window and tray menu when the headset is disconnected" width="340"></td>
+  </tr>
+  <tr>
+    <td align="center">Connected: controls and battery, with the minimal tray menu</td>
+    <td align="center">Disconnected: controls grey out automatically</td>
+  </tr>
+</table>
+
 ## Requirements
 
 - `headsetcontrol` installed and on your `PATH`
