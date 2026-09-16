@@ -189,8 +189,15 @@ class ControlWindow(QWidget):
     def set_state(self, state: DeviceState):
         if state.connected:
             self.title_label.setText(state.product or state.name or "Headset")
+            self.title_label.setToolTip("")
+        elif state.error:
+            # The CLI failed outright - don't pass that off as an unplugged
+            # headset, or a broken install looks like a missing device.
+            self.title_label.setText("headsetcontrol failed")
+            self.title_label.setToolTip(state.error)
         else:
             self.title_label.setText("Headset disconnected")
+            self.title_label.setToolTip("")
 
         if state.connected and state.has_battery and state.battery_level is not None:
             icon = battery_icon(state.battery_level, state.charging)

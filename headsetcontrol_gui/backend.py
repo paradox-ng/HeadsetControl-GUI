@@ -9,8 +9,10 @@ sidetone level or light state, so the GUI must remember what it last set.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
+import sys
 from dataclasses import dataclass, field
 
 
@@ -53,6 +55,28 @@ def binary_path() -> str | None:
     return shutil.which("headsetcontrol")
 
 
+def _child_env() -> dict[str, str] | None:
+    """Environment for the CLI child process, or None to inherit ours.
+
+    When frozen (PyInstaller/AppImage) the bootloader points LD_LIBRARY_PATH at
+    our bundled libs. The system `headsetcontrol` binary must NOT inherit that:
+    it would load our older bundled libstdc++ and die with a GLIBCXX version
+    error before printing any JSON, which the GUI then reads as "disconnected".
+    PyInstaller stashes any pre-existing value in <VAR>_ORIG, so restore that
+    when present and otherwise drop the variable entirely.
+    """
+    if not getattr(sys, "frozen", False):
+        return None
+    env = dict(os.environ)
+    for var in ("LD_LIBRARY_PATH", "LD_PRELOAD"):
+        original = env.pop(f"{var}_ORIG", None)
+        if original:
+            env[var] = original
+        else:
+            env.pop(var, None)
+    return env
+
+
 def _run(args: list[str], timeout: float = 8.0) -> subprocess.CompletedProcess:
     path = binary_path()
     if not path:
@@ -66,6 +90,7 @@ def _run(args: list[str], timeout: float = 8.0) -> subprocess.CompletedProcess:
             capture_output=True,
             text=True,
             timeout=timeout,
+            env=_child_env(),
         )
     except subprocess.TimeoutExpired as exc:
         raise HeadsetControlError("headsetcontrol timed out") from exc

@@ -118,7 +118,10 @@ class HeadsetTray:
     def _update_tray(self):
         s = self.state
         if not s.connected:
-            self.tray.setToolTip("Headset: disconnected")
+            if s.error:
+                self.tray.setToolTip(f"headsetcontrol failed: {s.error}")
+            else:
+                self.tray.setToolTip("Headset: disconnected")
         else:
             parts = [s.product or s.name or "Headset"]
             if s.has_battery and s.battery_level is not None:
@@ -136,7 +139,12 @@ class HeadsetTray:
         self.menu.clear()
         s = self.state
         if not s.connected:
-            header = QAction("Headset disconnected", self.menu)
+            header = QAction(
+                "headsetcontrol failed" if s.error else "Headset disconnected",
+                self.menu,
+            )
+            if s.error:
+                header.setToolTip(s.error)
         else:
             label = s.product or s.name or "Headset"
             if s.has_battery and s.battery_level is not None:
