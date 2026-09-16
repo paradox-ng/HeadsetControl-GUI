@@ -10,8 +10,27 @@ permissions:
   contents: read
 
 jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pytest
+        run: python -m pip install --upgrade pip pytest
+
+      # Pure-stdlib tests - no Qt, no display, no headset required.
+      # Invoked as `python -m pytest` so the repo root lands on sys.path.
+      - name: Run tests
+        run: python -m pytest tests/ -q
+
   appimage:
     name: AppImage (${{ matrix.arch }})
+    needs: test
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false

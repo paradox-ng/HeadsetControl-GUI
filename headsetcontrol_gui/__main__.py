@@ -12,15 +12,26 @@ import sys
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMessageBox
 
-from . import backend
+from . import __version__, backend
 from .tray import HeadsetTray
 
 SERVER_NAME = f"headsetcontrol-gui-{os.getuid()}"
 
 
 def main() -> int:
+    # Answered before QApplication so it works headless (no display needed) -
+    # this is how you check which build is actually deployed.
+    if "--version" in sys.argv or "-V" in sys.argv:
+        print(f"headsetcontrol-gui {__version__}")
+        return 0
+
     app = QApplication(sys.argv)
     app.setApplicationName("HeadsetControl GUI")
+    app.setApplicationVersion(__version__)
+    # Qt derives the Wayland app ID from the desktop file name. Without it the
+    # ID is empty, xdg-desktop-portal registration fails ("App info not found
+    # for ''") and the window isn't matched to its .desktop entry or icon.
+    app.setDesktopFileName("headsetcontrol-gui")
     # Tray app: don't quit when the window closes.
     app.setQuitOnLastWindowClosed(False)
 
